@@ -38,6 +38,7 @@ jobs:
           output-file: 'artifacts/image.sbom'
 
       - name: Generate license report
+        id: report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: ./
@@ -45,7 +46,7 @@ jobs:
           input: "artifacts/image.sbom"
 
       - name: Send output to file
-        run: echo ${{steps.generate_license_report.outputs.license_list}} > output.csv
+        run: echo ${{steps.report.outputs.license_list}} > output.csv
 
       - name: Convert CSV to Array and Export to JSON
         id: convert_csv
