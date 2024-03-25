@@ -1,8 +1,8 @@
 name: 'Grant Action'
 description: 'Executes the grant license compliance program to list discovered licenses as CSV'
 inputs:
-  image:
-    description: 'Image to view licenses'
+  input:
+    description: 'Input of SBOM or Docker image that will generate a license manifest'
     required: true
 outputs:
   license_list:

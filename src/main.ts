@@ -56,14 +56,14 @@ async function downloadAndCacheGrant(repo: string, tagName: string, assetName: s
 async function run(): Promise<void> {
   try {
 	  // Get input using core.getInput
-	  const imageInput = core.getInput('image', { required: true });
+	  const grantInput = core.getInput('input', { required: true });
 
 	  // TODO: parameterize this input
 	  const grantPath = await downloadAndCacheGrant('anchore/grant', 'v0.2.0', 'grant_0.2.0_linux_amd64.tar.gz', 'grant');
 
 	  // Execute Grant
 	  // TODO: need to pick the right command
-	  const output = execSync(`${grantPath} list ${imageInput}`).toString();
+	  const output = execSync(`${grantPath} list -o csv ${grantInput}`).toString();
 
 	  // Set output using core.setOutput
 	  core.setOutput('license_list', output);

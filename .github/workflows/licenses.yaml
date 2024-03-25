@@ -8,9 +8,23 @@ on:
 jobs:
   get-licenses:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image-for-analysis: ["debian:latest", "alpine:latest", "python:latest"]
     steps:
       - uses: actions/checkout@v4.1.1
-      - name: Dogfood local Action
+      - name: Create shared directory
+        run: |
+          mkdir -p artifacts
+      - uses: anchore/sbom-action@v0
+        name: Generate image SBOM
+        with:
+          image: ${{ matrix.image-for-analysis }}
+          format: json
+          upload-artifact: false
+          upload-release-assets: false
+          output-file: 'artifacts/image.sbom'
+      - name: Generate license report from sbom
         uses: ./
         with:
-          image: "debian:latest"
+          input: "artifacts/image.sbom"

@@ -33412,12 +33412,12 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // Get input using core.getInput
-            const imageInput = core.getInput('image', { required: true });
+            const grantInput = core.getInput('input', { required: true });
             // TODO: parameterize this input
             const grantPath = yield downloadAndCacheGrant('anchore/grant', 'v0.2.0', 'grant_0.2.0_linux_amd64.tar.gz', 'grant');
             // Execute Grant
             // TODO: need to pick the right command
-            const output = (0, child_process_1.execSync)(`${grantPath} list ${imageInput}`).toString();
+            const output = (0, child_process_1.execSync)(`${grantPath} list -o csv ${grantInput}`).toString();
             // Set output using core.setOutput
             core.setOutput('license_list', output);
         }

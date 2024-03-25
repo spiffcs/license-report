@@ -14,4 +14,6 @@ The token just needs basic permissions so that it can download the latest grant 
 
 After the `.env` file is set a developer should be able to run `act` to see the licenses listed for the given input image.
 
+If you want to update the local build with any changes you've made or if you're adding a feature you can refresh the dist with `npm run build`
+
 ![Screenshot 2024-03-24 at 9 28 55 PM](https://github.com/anchore/grant-action/assets/32073428/a1d36719-b969-44f6-9822-60a9fb8a64be)
