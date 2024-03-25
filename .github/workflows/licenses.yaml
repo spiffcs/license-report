@@ -28,3 +28,22 @@ jobs:
         uses: ./
         with:
           input: "artifacts/image.sbom"
+
+      - uses: jroehl/gsheet.action@release
+        with:
+          spreadsheetId: ${{ secrets.SPREADSHEET_ID }}
+          commands: |
+            [
+              { "command": "addWorksheet", "args": { "worksheetTitle": "<worksheetTitle>" }},
+              { "command": "updateData", "args": { "data": [["A1", "A2", "A3"]] }},
+              { "command": "getData", "args": { "range": "'<worksheetTitle>'!A2:B3" } }
+            ]
+        env:
+          GSHEET_CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
+          GSHEET_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+
+      - name: dump results
+        env:
+          #  the output of the action can be found in ${{ steps.update_worksheet.outputs.results }}
+          RESULTS: ${{ steps.update_worksheet.outputs.results }}
+        run: echo "$RESULTS" | jq
