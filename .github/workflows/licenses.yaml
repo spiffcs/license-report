@@ -50,6 +50,9 @@ jobs:
         id: convert
         run: python convert_csv.py
 
+      - name: debug
+        run: echo "The output was ${{ steps.convert.outputs.json_output }}"
+
       - uses: jroehl/gsheet.action@release
         with:
           spreadsheetId: ${{ secrets.SPREADSHEET_ID }}

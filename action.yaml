@@ -4,6 +4,8 @@ inputs:
   input:
     description: 'Input of SBOM or Docker image that will generate a license manifest'
     required: true
+  output_path:
+    required: true
 outputs:
   license_list:
     description: 'csv of provided inputs'
