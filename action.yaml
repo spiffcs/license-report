@@ -1,0 +1,12 @@
+name: 'Grant Action'
+description: 'Executes the grant license compliance program to list discovered licenses as CSV'
+inputs:
+  image:
+    description: 'Image to view licenses'
+    required: true
+outputs:
+  license_list:
+    description: 'csv of provided inputs'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

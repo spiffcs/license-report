@@ -1,0 +1,16 @@
+name: Publish License Data
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  get-licenses:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - name: Dogfood local Action
+        uses: ./
+        with:
+          image: "debian:latest"
