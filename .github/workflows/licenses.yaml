@@ -38,9 +38,8 @@ jobs:
           spreadsheetId: ${{ secrets.SPREADSHEET_ID }}
           commands: |
             [
-              { "command": "addWorksheet", "args": { "worksheetTitle": "<worksheetTitle>" }},
+              { "command": "addWorksheet", "args": { "worksheetTitle": ${{ matrix.image-for-analysis }} }},
               { "command": "updateData", "args": { "data": [["A1", "A2", "A3"]] }},
-              { "command": "getData", "args": { "range": "'<worksheetTitle>'!A2:B3" } }
             ]
         env:
           GSHEET_CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
