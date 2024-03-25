@@ -44,12 +44,10 @@ jobs:
         uses: ./
         with:
           input: "artifacts/image.sbom"
-
-      - name: Send output to file
-        run: echo ${{steps.report.outputs.license_list}} > output.csv
+          output_path: "artifacts/image.csv"
 
       - name: Convert CSV to Array and Export to JSON
-        id: convert_csv
+        id: convert
         run: python convert_csv.py
 
       - uses: jroehl/gsheet.action@release

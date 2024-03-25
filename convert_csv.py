@@ -2,7 +2,7 @@ import pandas as pd
 import json
 
 # Load the CSV file
-df = pd.read_csv('output.csv')
+df = pd.read_csv('artifacts/image.csv')
 
 # Convert the DataFrame to a multidimensional list (array)
 array = df.values.tolist()

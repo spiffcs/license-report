@@ -1,8 +1,9 @@
 import * as core from '@actions/core';
 import * as tc from '@actions/tool-cache';
 import fetch from 'node-fetch';
-import { execSync } from 'child_process';
 import fs from 'fs';
+import { execSync } from 'child_process';
+import { writeFile } from 'fs/promises'; // Use fs/promises for the promise-based version
 
 interface GitHubReleaseAsset {
   name: string;
@@ -57,6 +58,7 @@ async function run(): Promise<void> {
   try {
 	  // Get input using core.getInput
 	  const grantInput = core.getInput('input', { required: true });
+	  const outputPath = core.getInput('output_path', { required: true });
 
 	  // TODO: parameterize this input
 	  const grantPath = await downloadAndCacheGrant('anchore/grant', 'v0.2.0', 'grant_0.2.0_linux_amd64.tar.gz', 'grant');
@@ -67,6 +69,10 @@ async function run(): Promise<void> {
 
 	  // Set output using core.setOutput
 	  core.setOutput('license_list', output);
+
+	  // Writing the output to a file
+	  await writeFile(outputPath, output);
+	  core.info(`Output successfully written to ${outputPath}`);
   } catch (error: unknown) {
 	  if (error instanceof Error) {
 		  core.setFailed(error.message);

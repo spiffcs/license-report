@@ -38,8 +38,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const tc = __importStar(require("@actions/tool-cache"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
-const child_process_1 = require("child_process");
 const fs_1 = __importDefault(require("fs"));
+const child_process_1 = require("child_process");
+const promises_1 = require("fs/promises"); // Use fs/promises for the promise-based version
 function downloadAndCacheGrant(repo, tagName, assetName, binaryPathInArchive) {
     return __awaiter(this, void 0, void 0, function* () {
         const token = process.env.GITHUB_TOKEN;
@@ -78,6 +79,7 @@ function run() {
         try {
             // Get input using core.getInput
             const grantInput = core.getInput('input', { required: true });
+            const outputPath = core.getInput('output_path', { required: true });
             // TODO: parameterize this input
             const grantPath = yield downloadAndCacheGrant('anchore/grant', 'v0.2.0', 'grant_0.2.0_linux_amd64.tar.gz', 'grant');
             // Execute Grant
@@ -85,6 +87,9 @@ function run() {
             const output = (0, child_process_1.execSync)(`${grantPath} list -o csv ${grantInput}`).toString();
             // Set output using core.setOutput
             core.setOutput('license_list', output);
+            // Writing the output to a file
+            yield (0, promises_1.writeFile)(outputPath, output);
+            core.info(`Output successfully written to ${outputPath}`);
         }
         catch (error) {
             if (error instanceof Error) {

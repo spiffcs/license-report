@@ -33373,8 +33373,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
 const node_fetch_1 = __importDefault(__nccwpck_require__(1793));
-const child_process_1 = __nccwpck_require__(2081);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
+const child_process_1 = __nccwpck_require__(2081);
+const promises_1 = __nccwpck_require__(3292); // Use fs/promises for the promise-based version
 function downloadAndCacheGrant(repo, tagName, assetName, binaryPathInArchive) {
     return __awaiter(this, void 0, void 0, function* () {
         const token = process.env.GITHUB_TOKEN;
@@ -33413,6 +33414,7 @@ function run() {
         try {
             // Get input using core.getInput
             const grantInput = core.getInput('input', { required: true });
+            const outputPath = core.getInput('output_path', { required: true });
             // TODO: parameterize this input
             const grantPath = yield downloadAndCacheGrant('anchore/grant', 'v0.2.0', 'grant_0.2.0_linux_amd64.tar.gz', 'grant');
             // Execute Grant
@@ -33420,6 +33422,9 @@ function run() {
             const output = (0, child_process_1.execSync)(`${grantPath} list -o csv ${grantInput}`).toString();
             // Set output using core.setOutput
             core.setOutput('license_list', output);
+            // Writing the output to a file
+            yield (0, promises_1.writeFile)(outputPath, output);
+            core.info(`Output successfully written to ${outputPath}`);
         }
         catch (error) {
             if (error instanceof Error) {
@@ -33505,6 +33510,14 @@ module.exports = require("events");
 
 "use strict";
 module.exports = require("fs");
+
+/***/ }),
+
+/***/ 3292:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("fs/promises");
 
 /***/ }),
 
