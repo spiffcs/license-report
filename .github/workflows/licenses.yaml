@@ -15,9 +15,19 @@ jobs:
         image-for-analysis: ["debian:latest", "alpine:latest", "python:latest"]
     steps:
       - uses: actions/checkout@v4.1.1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas
+
       - name: Create shared directory
         run: |
           mkdir -p artifacts
+
       - uses: anchore/sbom-action@v0
         name: Generate image SBOM
         with:
@@ -26,12 +36,20 @@ jobs:
           upload-artifact: false
           upload-release-assets: false
           output-file: 'artifacts/image.sbom'
-      - name: Generate license report from sbom
+
+      - name: Generate license report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: ./
         with:
           input: "artifacts/image.sbom"
+
+      - name: Send output to file
+        run: echo ${{steps.generate_license_report.outputs.license_list}} > output.csv
+
+      - name: Convert CSV to Array and Export to JSON
+        id: convert_csv
+        run: python convert_csv.py
 
       - uses: jroehl/gsheet.action@release
         with:
@@ -39,7 +57,7 @@ jobs:
           commands: |
             [
               { "command": "addWorksheet", "args": { "worksheetTitle": ${{ matrix.image-for-analysis }} }},
-              { "command": "updateData", "args": { "data": [["A1", "A2", "A3"]] }},
+              { "command": "updateData", "args": { "data": ${{ needs.convert.outputs.json_data}} }}
             ]
         env:
           GSHEET_CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
