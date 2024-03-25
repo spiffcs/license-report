@@ -25,6 +25,8 @@ jobs:
           upload-release-assets: false
           output-file: 'artifacts/image.sbom'
       - name: Generate license report from sbom
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: ./
         with:
           input: "artifacts/image.sbom"
