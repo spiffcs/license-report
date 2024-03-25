@@ -50,16 +50,13 @@ jobs:
         id: convert
         run: python convert_csv.py
 
-      - name: debug
-        run: echo "The output was ${{ steps.convert.outputs.json_output }}"
-
       - uses: jroehl/gsheet.action@release
         with:
           spreadsheetId: ${{ secrets.SPREADSHEET_ID }}
           commands: |
             [
               { "command": "addWorksheet", "args": { "worksheetTitle": "${{ matrix.image-for-analysis }}" }},
-              { "command": "updateData", "args": { "data": "${{ steps.convert.outputs.json_data}}" }}
+              { "command": "updateData", "args": { "data": ${{ steps.convert.outputs.json_output}} }}
             ]
         env:
           GSHEET_CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}

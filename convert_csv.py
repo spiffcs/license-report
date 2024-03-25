@@ -1,8 +1,12 @@
 import pandas as pd
 import json
 
+
 # Load the CSV file
 df = pd.read_csv('artifacts/image.csv')
+
+# Replace NaN with a valid JSON object (e.g., empty object {}) before serialization
+df.fillna('{}', inplace=True)
 
 # Convert the DataFrame to a multidimensional list (array)
 array = df.values.tolist()
