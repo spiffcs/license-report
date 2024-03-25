@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        image-for-analysis: ["debian:latest", "alpine:latest", "python:latest"]
+        image-for-analysis: ["debian:latest", "alpine:latest", "chainguard/wolfi-base:latest"]
     steps:
       - uses: actions/checkout@v4.1.1
       - uses: actions/setup-python@v5
