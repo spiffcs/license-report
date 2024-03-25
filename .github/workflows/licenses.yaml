@@ -58,8 +58,8 @@ jobs:
           spreadsheetId: ${{ secrets.SPREADSHEET_ID }}
           commands: |
             [
-              { "command": "addWorksheet", "args": { "worksheetTitle": ${{ matrix.image-for-analysis }} }},
-              { "command": "updateData", "args": { "data": ${{ needs.convert.outputs.json_data}} }}
+              { "command": "addWorksheet", "args": { "worksheetTitle": "${{ matrix.image-for-analysis }}" }},
+              { "command": "updateData", "args": { "data": "${{ steps.convert.outputs.json_data}}" }}
             ]
         env:
           GSHEET_CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
