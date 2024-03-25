@@ -1,6 +1,8 @@
 name: Publish License Data
 
 on:
+  workflow_dispatch:
+
   push:
     branches:
       - main
